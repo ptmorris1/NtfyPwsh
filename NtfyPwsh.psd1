@@ -14,7 +14,7 @@
             ProjectURI   = 'https://github.com/ptmorris1/NtfyPwsh'
             LicenseURI   = 'https://github.com/ptmorris1/NtfyPwsh/blob/main/LICENSE'
             ReleaseNotes = @'
-### Trilium 0.1.0
+### NtfyPwsh 0.1.0
 * Initial Release of NtfyPwsh
   * Used to send notifications to ntfy from PowerShell in a Module!
 ---
