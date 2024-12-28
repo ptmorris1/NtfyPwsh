@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+Builds an ntfy action header string.
+.DESCRIPTION
+This function constructs an ntfy action header string based on the provided parameters.
+.PARAMETER Action
+The type of action to perform. Valid values are 'view', 'http', 'broadcast'.
+.PARAMETER Label
+The label for the action.
+.PARAMETER URL
+The URL associated with the action.
+.PARAMETER Clear
+Optional switch to clear the action.
+.PARAMETER Method
+The HTTP method to use for 'http' actions. Valid values are 'GET', 'POST', 'PUT', 'DELETE'.
+.PARAMETER Body
+Optional body content for 'http' actions.
+.PARAMETER Headers
+Optional headers for 'http' actions.
+.PARAMETER Intent
+Optional intent for 'broadcast' actions.
+.PARAMETER Extras
+Optional extras for 'broadcast' actions.
+.EXAMPLE
+$actionHeader = Build-NtfyAction -Action 'view' -Label 'Open' -URL 'https://example.com'
+#>
 function Build-NtfyAction {
     param (
         [Parameter(Mandatory = $true)]
@@ -56,6 +82,52 @@ function Build-NtfyAction {
     return $actionsHeader
 }
 
+<#
+.SYNOPSIS
+Sends a message using ntfy.
+.DESCRIPTION
+This function sends a message to an ntfy topic with various optional parameters for customization.
+.PARAMETER Title
+The title of the message.
+.PARAMETER Body
+The body content of the message.
+.PARAMETER URI
+The base URI for the ntfy instance.
+.PARAMETER Topic
+The topic to which the message will be sent.
+.PARAMETER TokenPlainText
+Plain text token for authorization.
+.PARAMETER TokenCreds
+Credential object for authorization.
+.PARAMETER Priority
+The priority level of the message. Valid values are 'Max', 'High', 'Default', 'Low', 'Min'.
+.PARAMETER Tags
+Optional tags for the message.
+.PARAMETER SkipCertCheck
+Optional switch to skip certificate checks.
+.PARAMETER Delay
+Optional delay for the message.
+.PARAMETER OnClick
+Optional URL to open when the message is clicked.
+.PARAMETER Action
+Optional actions to include with the message.
+.PARAMETER AttachmentPath
+Optional path to a file to attach to the message.
+.PARAMETER AttachmentName
+Optional name for the attached file.
+.PARAMETER AttachmentURL
+Optional URL to an attachment.
+.PARAMETER Icon
+Optional icon for the message.
+.PARAMETER Email
+Optional email address for the message.
+.PARAMETER Phone
+Optional phone number for the message.
+.PARAMETER Credential
+Credential object for authorization.
+.EXAMPLE
+Send-NtfyMessage -Topic 'mytopic' -Title 'Hello' -Body 'This is a test message'
+#>
 function Send-NtfyMessage {
     param (
         [string]$Title,
