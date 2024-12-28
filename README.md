@@ -7,7 +7,7 @@ NtfyPwsh is a PowerShell module for sending notifications using the Ntfy service
 To use the NtfyPwsh module, simply import the module into your PowerShell session:
 
 ```powershell
-Import-Module -Name "D:/OneDrive/Documents/PowerShell/Homelab/NtfyPwsh.psm1"
+Import-Module -Name "D:/PowerShell/NtfyPwsh.psm1"
 ```
 
 ## Functions
