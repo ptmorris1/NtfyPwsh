@@ -4,10 +4,10 @@ NtfyPwsh is a PowerShell module for sending notifications using the Ntfy service
 
 ## Installation
 
-To use the NtfyPwsh module, simply import the module into your PowerShell session:
+The module is hosted on the [Powershell Gallery](https://www.powershellgallery.com/packages/NtfyPwsh)
 
 ```powershell
-Import-Module -Name "D:/PowerShell/NtfyPwsh.psm1"
+Install-Module -Name NtfyPwsh
 ```
 
 ## Functions
@@ -15,6 +15,8 @@ Import-Module -Name "D:/PowerShell/NtfyPwsh.psm1"
 ### `Build-NtfyAction`
 
 Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-NtfyMessage](#send-ntfymessage) -Action parameter.
+
+Up to 3 actions are allowed.
 
 #### Parameters
 
