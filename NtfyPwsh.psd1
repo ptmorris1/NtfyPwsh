@@ -1,5 +1,5 @@
 @{
-    ModuleVersion   = '0.1.0'
+    ModuleVersion   = '0.2.0'
     Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
     CompanyName     = 'Patrick Morris '
     Copyright       = '2024 Patrick Morris'
@@ -17,6 +17,10 @@
 ### NtfyPwsh 0.1.0
 * Initial Release of NtfyPwsh
   * Used to send notifications to ntfy from PowerShell in a Module!
+---
+### NtfyPwsh 0.2.0
+* Added default parameter set.
+* Fixed some parameter set issues.
 ---
 '@
         }
