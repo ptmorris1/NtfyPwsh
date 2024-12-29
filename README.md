@@ -2,6 +2,17 @@
 
 NtfyPwsh is a PowerShell module for sending notifications using the Ntfy service. This module allows you to send messages with various actions, attachments, and other customizations.
 
+## Change Log
+
+### NtfyPwsh 0.1.0
+* Initial Release of NtfyPwsh
+  * Used to send notifications to ntfy from PowerShell in a Module!
+---
+### NtfyPwsh 0.2.0
+* Added default parameter set.
+* Fixed some parameter set issues.
+---
+
 ## Installation
 
 The module is hosted on the [Powershell Gallery](https://www.powershellgallery.com/packages/NtfyPwsh)
