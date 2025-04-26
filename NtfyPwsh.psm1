@@ -322,12 +322,12 @@ function Send-NtfyMessage {
         }
 
         if ($Tags) {
-            $ntfyTags = $Tags | ForEach-Object {
+            $ntfyTags = ($Tags | ForEach-Object {
                 switch ($_) {
                     '👍' { '+1' }
                     '👎️' { '-1' }
                     '🤦' { 'facepalm' }
-                    '🥳' { 'party' }
+                    '🥳' { 'partying_face' }
                     '⚠️' { 'warning' }
                     '⛔' { 'no_entry' }
                     '🎉' { 'tada' }
@@ -341,7 +341,7 @@ function Send-NtfyMessage {
                     '💻' { 'computer' }
                     default { $_ }
                 }
-            } -join ','
+            }) -join ','
             $ntfyHeaders.Add('Tags', $ntfyTags)
         }
 

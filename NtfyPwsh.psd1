@@ -1,8 +1,8 @@
 @{
-    ModuleVersion   = '0.2.0'
+    ModuleVersion   = '0.3.0'
     Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
     CompanyName     = 'Patrick Morris '
-    Copyright       = '2024 Patrick Morris'
+    Copyright       = '2025 Patrick Morris'
     Author          = 'Patrick Morris'
     AliasesToExport = '*'
     RootModule      = 'NtfyPwsh.psm1'
@@ -21,6 +21,10 @@
 ### NtfyPwsh 0.2.0
 * Added default parameter set.
 * Fixed some parameter set issues.
+---
+### NtfyPwsh 0.3.0
+* Fixed tags parameter
+  * Updated tag value 'partying_face'
 ---
 '@
         }
