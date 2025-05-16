@@ -4,25 +4,35 @@
 ![Downloads](https://img.shields.io/powershellgallery/dt/NtfyPwsh)
 ![PSGallery Quality](https://img.shields.io/powershellgallery/p/NtfyPwsh)
 
+> PowerShell module for sending notifications using the Ntfy service, supporting messages, actions, attachments, and more.
+
+---
+
+## 📖 Table of Contents <!-- omit in toc -->
+- [🦾 Description](#-description)
+- [🛠 Requirements](#-requirements)
+- [📦 Installation](#-installation)
+- [📚 Available Functions](#-available-functions)
+- [📝 Send-NtfyMessage](#-send-ntfymessage)
+- [⚡ Build-NtfyAction](#-build-ntfyaction)
+- [📄 License](#-license)
+
+---
+
+## 🦾 Description
 
 NtfyPwsh is a PowerShell module for sending notifications using the Ntfy service. This module allows you to send messages with various actions, attachments, and other customizations.
 
-## Change Log
-
-### NtfyPwsh 0.1.0
-* Initial Release of NtfyPwsh
-  * Used to send notifications to ntfy from PowerShell in a Module!
----
-### NtfyPwsh 0.2.0
-* Added default parameter set.
-* Fixed some parameter set issues.
----
-### NtfyPwsh 0.3.0
-* Fixed tags parameter
-  * Updated tag value 'partying_face'
 ---
 
-## Installation
+## 🛠 Requirements
+
+* PowerShell 7 or higher
+* Access to the internet or your self-hosted Ntfy server
+
+---
+
+## 📦 Installation
 
 The module is hosted on the [Powershell Gallery](https://www.powershellgallery.com/packages/NtfyPwsh)
 
@@ -30,23 +40,30 @@ The module is hosted on the [Powershell Gallery](https://www.powershellgallery.c
 Install-Module -Name NtfyPwsh
 ```
 
-## Functions
+---
 
-### `Send-NtfyMessage`
+## 📚 Available Functions <!-- omit in toc -->
+
+- [Send-NtfyMessage](#-send-ntfymessage)
+- [Build-NtfyAction](#-build-ntfyaction)
+
+---
+
+## 📝 Send-NtfyMessage <!-- omit in toc -->
 
 Sends a notification using the Ntfy service.
 
-#### Parameters
+### Parameters
 
 - `Title` (Optional): The title of the notification.
 - `Body` (Optional): The body content of the notification.
-- `URI` (Optional): The base URI of the Ntfy service.  Default is ntfy.sh or enter self hosted URL.
-- `Topic` (Mandatory): The topic for the notification.  No spaces or special characters.
+- `URI` (Optional): The base URI of the Ntfy service. Default is ntfy.sh or enter self hosted URL.
+- `Topic` (Mandatory): The topic for the notification. No spaces or special characters.
 - `TokenPlainText` (Optional): The plain text token for authentication.
 - `TokenCreds` (Optional): The credentials for token-based authentication.
 - `Credential` (Optional): Credentials for basic authentication.
 - `Priority` (Optional): The priority of the notification (`Max`, `High`, `Default`, `Low`, `Min`).
-- `Tags` (Optional): Tags for the notification.  [TagList](https://docs.ntfy.sh/publish/?h=topic#tags-emojis)
+- `Tags` (Optional): Tags for the notification. [TagList](https://docs.ntfy.sh/publish/?h=topic#tags-emojis)
 - `SkipCertCheck` (Optional): A switch to skip certificate checks.
 - `Delay` (Optional): Delay for the notification.
 - `OnClick` (Optional): URL to open when the notification is clicked.
@@ -54,14 +71,13 @@ Sends a notification using the Ntfy service.
 - `AttachmentPath` (Optional): Path to the attachment file.
 - `AttachmentName` (Optional): Name of the attachment file.
 - `AttachmentURL` (Optional): URL of the attachment.
-- `Icon` (Optional): Icon URL for the notification.  Only for Andriod.  Only PNG or JPEG.
+- `Icon` (Optional): Icon URL for the notification. Only for Android. Only PNG or JPEG.
 - `Email` (Optional): Email address for the notification.
 - `Phone` (Optional): Phone number for the notification.
 
+### Examples
 
-## Examples
-
-### Simple Notification with NO authorization using the default URI which uses 'https://ntfy.sh'
+#### Simple Notification with NO authorization using the default URI
 
 ```powershell
 $ntfy = @{
@@ -69,14 +85,12 @@ $ntfy = @{
     Body  = 'This is a test message'
     Title = 'Test Title'
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### Simple Notification with api token Bearer/Basic authorization, also uses a custom URL.
+#### Notification with API token Bearer/Basic authorization, custom URL
 
 ```powershell
-# user name does not matter.  You will be asked to enter API Token.
 $Creds = Get-Credential -UserName 'admin' -Message 'Enter API Token'
 $ntfy = @{
     URI   = 'https://ntfy.mydomain.com'
@@ -85,14 +99,12 @@ $ntfy = @{
     Title = 'Test Title'
     TokenCreds = $Creds
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### Simple Notification with api token plain text, Bearer/Basic authorization.
+#### Notification with API token plain text
 
 ```powershell
-# Uses plain text token.
 $ntfy = @{
     URI   = 'https://ntfy.mydomain.com'
     Topic = 'testtopic'
@@ -100,14 +112,12 @@ $ntfy = @{
     Title = 'Test Title'
     TokenPlainText = 'tk_mytokenplaintexthere'
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### Simple Notification with username\password, Basic authorization.
+#### Notification with username/password, Basic authorization
 
 ```powershell
-# User name is required here.
 $Creds = Get-Credential -UserName 'admin' -Message 'enter users password'
 $ntfy = @{
     URI   = 'https://ntfy.mydomain.com'
@@ -116,11 +126,10 @@ $ntfy = @{
     Title = 'Test Title'
     Credential = $Creds
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### Notification with 2 Actions, uses the [Build-NtfyAction](#build-ntfyaction)
+#### Notification with 2 Actions, uses the [Build-NtfyAction](#-build-ntfyaction)
 
 ```powershell
 $ntfy = @{
@@ -133,11 +142,10 @@ $ntfy = @{
         (Build-NtfyAction -Action http -Label 'HTTP Action' -URL 'https://ntfy.sh/test' -Method POST -Body 'Ntfy action click sent this message')
     )
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### Notification with Attachment
+#### Notification with Attachment
 
 ```powershell
 $ntfy = @{
@@ -148,17 +156,16 @@ $ntfy = @{
     AttachmentPath = 'D:/path/to/attachment.png'
     AttachmentName = 'attachment.png'
 }
-
 Send-NtfyMessage @ntfy
 ```
 
-### `Build-NtfyAction`
+---
 
-Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-NtfyMessage](#send-ntfymessage) -Action parameter.
+## ⚡ Build-NtfyAction <!-- omit in toc -->
 
-Up to 3 actions are allowed.
+Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-NtfyMessage](#-send-ntfymessage) -Action parameter. Up to 3 actions are allowed.
 
-#### Parameters
+### Parameters
 
 - `Action` (Mandatory): The type of action (`view`, `http`, `broadcast`).
 - `Label` (Mandatory): The label for the action.
@@ -170,21 +177,21 @@ Up to 3 actions are allowed.
 - `Intent` (Optional): The intent for the broadcast action.
 - `Extras` (Optional): Additional extras for the broadcast action.
 
-## Examples
+### Examples
 
-### Creates a view action in a vairable that can be used with Send-NtfyMessage
+#### Create a view action variable
 
 ```powershell
 $action1 = Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh'
 ```
 
-### Creates an http action in a vairable that can be used with Send-NtfyMessage
+#### Create an http action variable
 
 ```powershell
 $action2 = Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost'
 ```
 
-### Sends message using $action1 and $action2.
+#### Send message using $action1 and $action2
 
 ```powershell
 $action1 = Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh'
@@ -192,13 +199,14 @@ $action2 = Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy
 Send-NtfyMessage -Topic 'test' -Action @($action1,$action2)
 ```
 
-### Sends message with actions defined.
+#### Send message with actions defined inline
 
 ```powershell
 Send-NtfyMessage -Topic 'test' -Action @(Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost',Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh')
 ```
+
 ---
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License.
