@@ -3,6 +3,7 @@
 ![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/NtfyPwsh)
 ![Downloads](https://img.shields.io/powershellgallery/dt/NtfyPwsh)
 ![PSGallery Quality](https://img.shields.io/powershellgallery/p/NtfyPwsh)
+![NtfyPwsh Blog](https://ptmorris1.github.io/posts/NtfyPwsh)
 
 > PowerShell module for sending notifications using the Ntfy service, supporting messages, actions, attachments, and more.
 
