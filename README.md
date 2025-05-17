@@ -16,6 +16,7 @@
 - [📚 Available Functions](#-available-functions)
 - [📝 Send-NtfyMessage](#-send-ntfymessage)
 - [⚡ Build-NtfyAction](#-build-ntfyaction)
+- [📰 Changelog](#-changelog)
 - [📄 License](#-license)
 
 ---
@@ -54,15 +55,16 @@ Install-Module -Name NtfyPwsh
 
 Sends a notification using the Ntfy service.
 
+> **Note:** As of v0.4.0, authentication uses `-TokenCreds` (API token via `Get-Credential`) or `-Credential` (username/password via `Get-Credential`). The `-TokenPlainText` parameter has been removed.
+
 ### Parameters
 
 - `Title` (Optional): The title of the notification.
 - `Body` (Optional): The body content of the notification.
 - `URI` (Optional): The base URI of the Ntfy service. Default is ntfy.sh or enter self hosted URL.
 - `Topic` (Mandatory): The topic for the notification. No spaces or special characters.
-- `TokenPlainText` (Optional): The plain text token for authentication.
-- `TokenCreds` (Optional): The credentials for token-based authentication.
-- `Credential` (Optional): Credentials for basic authentication.
+- `TokenCreds` (Optional): The credentials for token-based authentication (use `Get-Credential` and enter the API token as the password).
+- `Credential` (Optional): Credentials for basic authentication (use `Get-Credential` for username/password).
 - `Priority` (Optional): The priority of the notification (`Max`, `High`, `Default`, `Low`, `Min`).
 - `Tags` (Optional): Tags for the notification. [TagList](https://docs.ntfy.sh/publish/?h=topic#tags-emojis)
 - `SkipCertCheck` (Optional): A switch to skip certificate checks.
@@ -92,7 +94,7 @@ Send-NtfyMessage @ntfy
 #### Notification with API token Bearer/Basic authorization, custom URL
 
 ```powershell
-$Creds = Get-Credential -UserName 'admin' -Message 'Enter API Token'
+$Creds = Get-Credential -UserName 'token' -Message 'Enter API Token as password'
 $ntfy = @{
     URI   = 'https://ntfy.mydomain.com'
     Topic = 'testtopic'
@@ -103,23 +105,10 @@ $ntfy = @{
 Send-NtfyMessage @ntfy
 ```
 
-#### Notification with API token plain text
-
-```powershell
-$ntfy = @{
-    URI   = 'https://ntfy.mydomain.com'
-    Topic = 'testtopic'
-    Body  = 'This is a test message'
-    Title = 'Test Title'
-    TokenPlainText = 'tk_mytokenplaintexthere'
-}
-Send-NtfyMessage @ntfy
-```
-
 #### Notification with username/password, Basic authorization
 
 ```powershell
-$Creds = Get-Credential -UserName 'admin' -Message 'enter users password'
+$Creds = Get-Credential -UserName 'admin' -Message 'Enter user password'
 $ntfy = @{
     URI   = 'https://ntfy.mydomain.com'
     Topic = 'testtopic'
@@ -205,6 +194,12 @@ Send-NtfyMessage -Topic 'test' -Action @($action1,$action2)
 ```powershell
 Send-NtfyMessage -Topic 'test' -Action @(Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost',Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh')
 ```
+
+---
+
+## 📰 Changelog
+
+See the [Changelog](changelog.md) for a history of notable changes to this module.
 
 ---
 

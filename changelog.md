@@ -1,25 +1,10 @@
-@{
-    ModuleVersion   = '0.4.0'
-    Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
-    CompanyName     = 'Patrick Morris '
-    Copyright       = '2025 Patrick Morris'
-    Author          = 'Patrick Morris'
-    AliasesToExport = '*'
-    RootModule      = 'NtfyPwsh.psm1'
-    Description     = 'Powershell module to send ntfy notifications.'
-    PrivateData     = @{
-        PSData = @{
-            Tags         = 'Windows', 'NtfyPwsh', 'PowerShell', 'PSEdition_Core', 'Ntfy'
-            ProjectURI   = 'https://github.com/ptmorris1/NtfyPwsh'
-            LicenseURI   = 'https://github.com/ptmorris1/NtfyPwsh/blob/main/LICENSE'
-            ReleaseNotes = @'
 # 📅 Changelog
 
 All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
-## [0.4.0] - 2025-05-17
+## [0.4.0] - 2025-01-01
 
 ### Breaking
 
@@ -61,8 +46,3 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 ---
 
 > 📌 This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) principles.
-
-'@
-        }
-    }
-}
