@@ -4,6 +4,19 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
+## [0.5.0] - 2025-02-01
+
+### Fixed
+
+* Fixed and updated parameter sets.
+
+### Updated
+
+* Updated docs with examples and more detail.
+* Updated comment-based help in module.
+
+---
+
 ## [0.4.0] - 2025-01-01
 
 ### Breaking

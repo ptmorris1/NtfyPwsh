@@ -3,7 +3,6 @@
 ![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/NtfyPwsh)
 ![Downloads](https://img.shields.io/powershellgallery/dt/NtfyPwsh)
 ![PSGallery Quality](https://img.shields.io/powershellgallery/p/NtfyPwsh)
-![NtfyPwsh Blog](https://ptmorris1.github.io/posts/NtfyPwsh)
 
 > PowerShell module for sending notifications using the Ntfy service, supporting messages, actions, attachments, and more.
 
@@ -16,7 +15,9 @@
 - [📚 Available Functions](#-available-functions)
 - [📝 Send-NtfyMessage](#-send-ntfymessage)
 - [⚡ Build-NtfyAction](#-build-ntfyaction)
+- [🧑‍💻 Examples](#-examples)
 - [📰 Changelog](#-changelog)
+- [🌐 Further Reading](#-further-reading)
 - [📄 License](#-license)
 
 ---
@@ -62,6 +63,7 @@ Sends a notification using the Ntfy service.
 - `Title` (Optional): The title of the notification.
 - `Body` (Optional): The body content of the notification.
 - `URI` (Optional): The base URI of the Ntfy service. Default is ntfy.sh or enter self hosted URL.
+  > **Note:** If `-URI` is not specified, messages are sent to the free public [ntfy.sh](https://ntfy.sh) server. Topics are public and there are limitations. See [public topics](https://docs.ntfy.sh/publish/?h=public#public-topics) and [limitations](https://docs.ntfy.sh/publish/?h=public#limitations) in the ntfy documentation for details.
 - `Topic` (Mandatory): The topic for the notification. No spaces or special characters.
 - `TokenCreds` (Optional): The credentials for token-based authentication (use `Get-Credential` and enter the API token as the password).
 - `Credential` (Optional): Credentials for basic authentication (use `Get-Credential` for username/password).
@@ -80,74 +82,7 @@ Sends a notification using the Ntfy service.
 
 ### Examples
 
-#### Simple Notification with NO authorization using the default URI
-
-```powershell
-$ntfy = @{
-    Topic = 'testtopic'
-    Body  = 'This is a test message'
-    Title = 'Test Title'
-}
-Send-NtfyMessage @ntfy
-```
-
-#### Notification with API token Bearer/Basic authorization, custom URL
-
-```powershell
-$Creds = Get-Credential -UserName 'token' -Message 'Enter API Token as password'
-$ntfy = @{
-    URI   = 'https://ntfy.mydomain.com'
-    Topic = 'testtopic'
-    Body  = 'This is a test message'
-    Title = 'Test Title'
-    TokenCreds = $Creds
-}
-Send-NtfyMessage @ntfy
-```
-
-#### Notification with username/password, Basic authorization
-
-```powershell
-$Creds = Get-Credential -UserName 'admin' -Message 'Enter user password'
-$ntfy = @{
-    URI   = 'https://ntfy.mydomain.com'
-    Topic = 'testtopic'
-    Body  = 'This is a test message'
-    Title = 'Test Title'
-    Credential = $Creds
-}
-Send-NtfyMessage @ntfy
-```
-
-#### Notification with 2 Actions, uses the [Build-NtfyAction](#-build-ntfyaction)
-
-```powershell
-$ntfy = @{
-    URI   = 'https://ntfy.sh'
-    Topic = 'test'
-    Body  = 'This is a test message with actions'
-    Title = 'Test Notification'
-    Action = @(
-        (Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh/test')
-        (Build-NtfyAction -Action http -Label 'HTTP Action' -URL 'https://ntfy.sh/test' -Method POST -Body 'Ntfy action click sent this message')
-    )
-}
-Send-NtfyMessage @ntfy
-```
-
-#### Notification with Attachment
-
-```powershell
-$ntfy = @{
-    URI            = 'https://ntfy.sh'
-    Topic          = 'test'
-    Body           = 'This is a test message with attachment'
-    Title          = 'Test attachment'
-    AttachmentPath = 'D:/path/to/attachment.png'
-    AttachmentName = 'attachment.png'
-}
-Send-NtfyMessage @ntfy
-```
+See the [Examples section](#-examples) below for usage scenarios.
 
 ---
 
@@ -169,37 +104,153 @@ Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-Ntf
 
 ### Examples
 
-#### Create a view action variable
+See the [Examples section](#-examples) below for usage scenarios.
+
+---
+
+## 🧑‍💻 Examples
+
+> For more detailed descriptions of these examples, see the [ntfy publish documentation](https://docs.ntfy.sh/publish/).
+
+### Post a basic message with only a message body to the default URI https://ntfy.sh
+
+```powershell
+Send-NtfyMessage -Topic 'ntfypwsh' -Body 'Hello from NtfyPwsh!'
+```
+
+### Post a message to a custom Ntfy server URI
+
+```powershell
+Send-NtfyMessage -Topic 'ntfypwsh' -Body 'Hello from my self-hosted Ntfy!' -URI 'https://ntfy.example.com'
+```
+
+### Post a message with a custom title
+
+```powershell
+$ntfy = @{
+    Topic = 'ntfypwsh'
+    Title = 'Dogs are better than cats'
+    Body  = 'Oh my ...'
+}
+Send-NtfyMessage @ntfy
+```
+
+### Post a message with title, priority, and tags
+
+```powershell
+$ntfy = @{
+    Topic    = 'ntfypwsh'
+    Title    = 'Unauthorized access detected'
+    Priority = 'Max'
+    Tags     = @('warning','skull')
+    Body     = 'Remote access to phils-laptop detected. Act right away.'
+}
+Send-NtfyMessage @ntfy
+```
+
+### Post a multi-line message with click action, action button, image attachment, and email
+
+```powershell
+$ntfy = @{
+    Topic         = 'ntfypwsh'
+    Body          = @"
+There's someone at the door. 🐶
+
+Please check if it's a good boy or a hooman.
+Doggies have been known to ring the doorbell.
+"@
+    OnClick       = 'https://home.nest.com'
+    AttachmentURL = 'https://ibb.co/JjSRzMSk'
+    Action        = @(Build-NtfyAction -Action http -Label 'Open door' -URL 'https://api.nest.com/open/yAxkasd' -Clear)
+    Email         = 'phil@example.com'
+}
+Send-NtfyMessage @ntfy
+```
+
+### Notification with 2 Actions, using Build-NtfyAction variables
 
 ```powershell
 $action1 = Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh'
+$action2 = Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh/ntfypwsh' -Body 'I jut sent a message to myself!' -Method POST
+Send-NtfyMessage -Topic 'ntfypwsh' -Action @($action1,$action2)
 ```
 
-#### Create an http action variable
+### Notification with Local File Attachment
 
 ```powershell
-$action2 = Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost'
+$ntfy = @{
+    Topic          = 'ntfypwsh'
+    Body           = 'This is a test message with attachment'
+    Title          = 'Test attachment'
+    AttachmentPath = 'D:/path/to/attachment.png'
+    AttachmentName = 'attachment.png'
+}
+Send-NtfyMessage @ntfy
 ```
 
-#### Send message using $action1 and $action2
+### Basic authentication example (use when your server requires username and password)
 
 ```powershell
-$action1 = Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh'
-$action2 = Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost'
-Send-NtfyMessage -Topic 'test' -Action @($action1,$action2)
+$creds = Get-Credential -UserName 'your-username'  # Enter your username and password
+Send-NtfyMessage -Topic 'ntfypwsh' -Body 'Message with Basic Auth' -Credential $creds
 ```
 
-#### Send message with actions defined inline
+### Bearer token authentication example (use when your server requires an API token)
 
 ```powershell
-Send-NtfyMessage -Topic 'test' -Action @(Build-NtfyAction -Action http -Label 'http Action' -URL 'https://ntfy.sh' -Body 'BodyPost',Build-NtfyAction -Action view -Label 'View Action' -URL 'https://ntfy.sh')
+$tokenCreds = Get-Credential -UserName 'api'  # Enter your API token as the password
+Send-NtfyMessage -Topic 'ntfypwsh' -Body 'Message with Bearer token' -TokenCreds $tokenCreds
 ```
+
+### Scheduled delivery example
+
+```powershell
+$ntfy = @{
+    Topic = 'ntfypwsh'
+    Body  = 'This message will be delivered in 1 hour.'
+    Delay = '1h'  # You can use values like '30m', '2 days', 'tomorrow', or a Unix timestamp
+}
+Send-NtfyMessage @ntfy
+```
+
+### Forward notification to email example
+
+```powershell
+$ntfy = @{
+    Topic = 'ntfypwsh'
+    Body  = 'This message will be forwarded to your email.'
+    Email = 'user@example.com'  # Only one address is supported at a time
+}
+Send-NtfyMessage @ntfy
+```
+
+### Forward notification to phone example
+
+> You can use ntfy to call a phone and read the message out loud using text-to-speech. Phone numbers must be previously verified (via the web app), and authentication is required. On ntfy.sh, this feature is only available to Pro plans. [More info](https://docs.ntfy.sh/publish/?h=public#phone-calls)
+
+```powershell
+$ntfy = @{
+    Topic = 'ntfypwsh'
+    Body  = 'This message will be read out loud to your phone.'
+    Phone = '+12223334444'  # Use +<countrycode><number> format for a verified number, or 'yes' to use your first verified number
+}
+Send-NtfyMessage @ntfy
+```
+
+# The Delay parameter supports durations (e.g. '30m', '2h'), natural language (e.g. 'tomorrow', '10am'), or Unix timestamps. Minimum delay is 10 seconds, maximum is 3 days (server configurable).
 
 ---
 
 ## 📰 Changelog
 
 See the [Changelog](changelog.md) for a history of notable changes to this module.
+
+---
+
+## 🌐 Further Reading
+
+- [NtfyPwsh Blog](https://ptmorris1.github.io/posts/NtfyPwsh)
+- [Ntfy Docs for Publishing mesages](https://docs.ntfy.sh/publish/)
 
 ---
 

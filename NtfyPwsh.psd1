@@ -1,5 +1,5 @@
 @{
-    ModuleVersion   = '0.4.0'
+    ModuleVersion   = '0.5.0'
     Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
     CompanyName     = 'Patrick Morris '
     Copyright       = '2025 Patrick Morris'
@@ -19,7 +19,20 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
-## [0.4.0] - 2025-05-17
+## [0.5.0] - 2025-02-01
+
+### Fixed
+
+* Fixed and updated parameter sets.
+
+### Updated
+
+* Updated docs with examples and more detail.
+* Updated comment-based help in module.
+
+---
+
+## [0.4.0] - 2025-01-01
 
 ### Breaking
 

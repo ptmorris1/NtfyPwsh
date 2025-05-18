@@ -48,34 +48,42 @@ function Build-NtfyAction {
     .NOTES
     See https://docs.ntfy.sh/publish/#actions for more details on ntfy actions.
     #>
+    [CmdletBinding(DefaultParameterSetName = 'View')]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'View')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
         [ValidateSet('view', 'http', 'broadcast')]
         [string]$Action,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'View')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
         [string]$Label,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'View')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
         [string]$URL,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'View')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
         [switch]$Clear,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
         [ValidateSet('GET', 'POST', 'PUT', 'DELETE')]
         [string]$Method,
 
-        [Parameter(Mandatory = $false)]
-        [string]$Body,
-
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
         [hashtable]$Headers,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
+        [string]$Body,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
         [string]$Intent,
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
         [hashtable]$Extras
     )
 
@@ -187,34 +195,83 @@ function Send-NtfyMessage {
     .NOTES
     See https://docs.ntfy.sh/publish/ for more details on ntfy message options.
     #>
-    [CmdletBinding(DefaultParameterSetName = 'default')]
+    [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
         [string]$Title,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
         [string]$Body,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
         [string]$URI,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Credential')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'TokenCreds')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Anonymous')]
         [string]$Topic,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
         [ValidateSet('Max', 'High', 'Default', 'Low', 'Min')]
         [string]$Priority,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
         [ArgumentCompleter({
             param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
             $possibleValues = @('👍', '👎️', '🤦', '🥳', '⚠️', '⛔', '🎉', '️🚨', '🚫', '✔️', '🚩', '💿', '📢', '💀', '💻')
             $possibleValues | Where-Object { $_ -like "$wordToComplete*" }
         })]
         [string[]]$Tags,
-        [switch]$SkipCertCheck,
-        [string]$Delay,
-        [string]$OnClick,
-        [array]$Action,
-        [string]$AttachmentPath,
-        [string]$AttachmentName,
-        [string]$AttachmentURL,
-        [string]$Icon,
-        [string]$Email,
-        [string]$Phone,
         [Parameter(ParameterSetName = 'Credential')]
-        [PSCredential]$Credential,
         [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [switch]$SkipCertCheck,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$Delay,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$OnClick,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [array]$Action,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$AttachmentPath,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$AttachmentName,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$AttachmentURL,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$Icon,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$Email,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [string]$Phone,
+        [Parameter(Mandatory = $false, ParameterSetName = 'Credential')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
+        [PSCredential]$Credential,
+        [Parameter(Mandatory = $false, ParameterSetName = 'TokenCreds')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
         [PSCredential]$TokenCreds
     )
 
