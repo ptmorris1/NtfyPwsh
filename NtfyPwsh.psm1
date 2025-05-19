@@ -6,8 +6,14 @@ function Build-NtfyAction {
     .DESCRIPTION
     Constructs an ntfy action header string based on the provided parameters. Supports 'view', 'http', and 'broadcast' actions, and allows for optional HTTP methods, headers, body, intent, and extras. This function is useful for building the Actions header for ntfy messages that require user interaction or automation.
 
-    .PARAMETER Action
-    The type of action to perform. Valid values are 'view', 'http', or 'broadcast'.
+    .PARAMETER ActionView
+    Switch to specify 'view' action type.
+
+    .PARAMETER ActionHttp
+    Switch to specify 'http' action type.
+
+    .PARAMETER ActionBroadcast
+    Switch to specify 'broadcast' action type.
 
     .PARAMETER Label
     The label for the action button or link.
@@ -19,7 +25,7 @@ function Build-NtfyAction {
     If specified, adds 'clear=true' to the action, which will clear the notification after the action is triggered.
 
     .PARAMETER Method
-    The HTTP method for 'http' actions. Valid values: 'GET', 'POST', 'PUT', 'DELETE'.
+    The HTTP method for 'http' actions. Valid values: 'GET', 'POST', 'PUT', 'DELETE'. Defaults to 'POST'.
 
     .PARAMETER Body
     Optional body content for 'http' actions.
@@ -34,13 +40,18 @@ function Build-NtfyAction {
     Optional hashtable of extras for 'broadcast' actions (Android only).
 
     .EXAMPLE
-    Build-NtfyAction -Action 'view' -Label 'Open Website' -URL 'https://example.com'
+    Build-NtfyAction -ActionView -Label 'Open Website' -URL 'https://example.com'
 
     .EXAMPLE
-    Build-NtfyAction -Action 'http' -Label 'Trigger API' -URL 'https://api.example.com/trigger' -Method 'POST' -Body '{"foo":"bar"}' -Headers @{ Authorization = 'Bearer token' }
+    Build-NtfyAction -ActionHttp -Label 'Trigger API' -URL 'https://api.example.com/trigger' -Method 'POST' -Body '{"foo":"bar"}' -Headers @{ Authorization = 'Bearer token' }
 
     .EXAMPLE
-    Build-NtfyAction -Action 'broadcast' -Label 'Custom Intent' -Intent 'com.example.ACTION' -Extras @{ key1 = 'value1' }
+    Build-NtfyAction -ActionBroadcast -Label 'Custom Intent' -Intent 'io.heckel.ntfy.USER_ACTION' -Extras @{ key1 = 'value1' }
+
+    .EXAMPLE
+    # Example: Send broadcast action to take a screenshot
+    $action = Build-NtfyAction -ActionBroadcast -Label 'Take Screenshot' -Extras @{ cmd = 'screenshot' }
+    Send-NtfyMessage -Topic 'mytopic' -Body 'Please take a screenshot.' -Action $action
 
     .OUTPUTS
     System.String. Returns a formatted ntfy action header string.
@@ -50,29 +61,35 @@ function Build-NtfyAction {
     #>
     [CmdletBinding(DefaultParameterSetName = 'View')]
     param (
+        # Action type for all sets (use a switch for each set)
         [Parameter(Mandatory = $true, ParameterSetName = 'View')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
-        [ValidateSet('view', 'http', 'broadcast')]
-        [string]$Action,
+        [switch]$ActionView,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
+        [switch]$ActionHttp,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
+        [switch]$ActionBroadcast,
+
+        # Label for all sets
         [Parameter(Mandatory = $true, ParameterSetName = 'View')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
         [string]$Label,
 
+        # URL only for View and Http
         [Parameter(Mandatory = $true, ParameterSetName = 'View')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
         [string]$URL,
 
+        # Clear only for View
         [Parameter(Mandatory = $false, ParameterSetName = 'View')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
         [switch]$Clear,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Http')]
+        # Http action only
+        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
         [ValidateSet('GET', 'POST', 'PUT', 'DELETE')]
-        [string]$Method,
+        [string]$Method = 'POST',
 
         [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
         [hashtable]$Headers,
@@ -80,34 +97,58 @@ function Build-NtfyAction {
         [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
         [string]$Body,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'Broadcast')]
-        [string]$Intent,
+        [Parameter(Mandatory = $false, ParameterSetName = 'Http')]
+        [switch]$ClearHttp,
+
+        # Broadcast action only
+        [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
+        [string]$Intent = 'io.heckel.ntfy.USER_ACTION',
 
         [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
-        [hashtable]$Extras
+        [hashtable]$Extras,
+
+        [Parameter(Mandatory = $false, ParameterSetName = 'Broadcast')]
+        [switch]$ClearBroadcast
     )
+
+    # Map parameters for unified processing
+    if ($ActionView) {
+        $actionType = 'view'
+        $label = $Label
+        $url = $URL
+        $clear = $Clear
+    } elseif ($ActionHttp) {
+        $actionType = 'http'
+        $label = $Label
+        $url = $URL
+        $clear = $ClearHttp
+    } elseif ($ActionBroadcast) {
+        $actionType = 'broadcast'
+        $label = $Label
+        $clear = $ClearBroadcast
+    }
 
     $actionsHeader = ''
 
-    if ($Action -eq 'view') {
-        $actionsHeader = "$Action, $Label, $URL"
-        if ($Clear) { $actionsHeader += ', clear=true' }
-    } if ($Action -eq 'http') {
-        $actionsHeader = "$Action, $Label, $URL, method=$Method"
+    if ($actionType -eq 'view') {
+        $actionsHeader = "$actionType, $label, $url"
+        if ($clear) { $actionsHeader += ', clear=true' }
+    } elseif ($actionType -eq 'http') {
+        $actionsHeader = "$actionType, $label, $url, method=$Method"
         if ($Headers) {
             $simpleHeaders = ($Headers.GetEnumerator() | ForEach-Object { "headers.$($_.Key)=$($_.Value)" }) -join ', '
             $actionsHeader += ", $simpleHeaders"
         }
         if ($Body) { $actionsHeader += ", body=$Body" }
-        if ($Clear) { $actionsHeader += ', clear=true' }
-    } if ($Action -eq 'broadcast') {
-        $actionsHeader = "$Action, $Label"
+        if ($clear) { $actionsHeader += ', clear=true' }
+    } elseif ($actionType -eq 'broadcast') {
+        $actionsHeader = "$actionType, $label"
         if ($Intent) { $actionsHeader += ", intent=$Intent" }
         if ($Extras) {
-            $simpleExtras = ($Extras | ForEach-Object { "extras.$($_.Key)=$($_.Value)" }) -join ', '
+            $simpleExtras = ($Extras.GetEnumerator() | ForEach-Object { "extras.$($_.Key)=$($_.Value)" }) -join ', '
             $actionsHeader += ", $simpleExtras"
         }
-        if ($Clear) { $actionsHeader += ', clear=true' }
+        if ($clear) { $actionsHeader += ', clear=true' }
     }
 
     return $actionsHeader
@@ -175,6 +216,9 @@ function Send-NtfyMessage {
     .PARAMETER TokenCreds
     PSCredential object for Bearer token authentication (mutually exclusive with Credential). Use the token as the password.
 
+    .PARAMETER NoCache
+    If specified, adds a header to prevent the message from being cached server-side (sets Cache=no).
+
     .EXAMPLE
     Send-NtfyMessage -Topic 'mytopic' -Title 'Hello' -Body 'This is a test message'
 
@@ -188,6 +232,9 @@ function Send-NtfyMessage {
 
     .EXAMPLE
     Send-NtfyMessage -Topic 'mytopic' -Body 'With attachment' -AttachmentPath 'C:\temp\file.txt'
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be stored server-side" -NoCache
 
     .OUTPUTS
     System.Object. Returns the ntfy response object, or $null if the request failed.
@@ -212,7 +259,13 @@ function Send-NtfyMessage {
         [Parameter(Mandatory = $true, ParameterSetName = 'Credential')]
         [Parameter(Mandatory = $true, ParameterSetName = 'TokenCreds')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Anonymous')]
+        [ValidatePattern('^[^\s\W]+$')]
         [string]$Topic,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [ValidatePattern('^\+\d{1,3}\d{10}$')]
+        [string]$Phone,
         [Parameter(ParameterSetName = 'Credential')]
         [Parameter(ParameterSetName = 'TokenCreds')]
         [Parameter(ParameterSetName = 'Anonymous')]
@@ -263,16 +316,16 @@ function Send-NtfyMessage {
         [Parameter(ParameterSetName = 'TokenCreds')]
         [Parameter(ParameterSetName = 'Anonymous')]
         [string]$Email,
-        [Parameter(ParameterSetName = 'Credential')]
-        [Parameter(ParameterSetName = 'TokenCreds')]
-        [Parameter(ParameterSetName = 'Anonymous')]
-        [string]$Phone,
         [Parameter(Mandatory = $false, ParameterSetName = 'Credential')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
         [PSCredential]$Credential,
         [Parameter(Mandatory = $false, ParameterSetName = 'TokenCreds')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
-        [PSCredential]$TokenCreds
+        [PSCredential]$TokenCreds,
+        [Parameter(Mandatory = $false, ParameterSetName = 'Credential')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'TokenCreds')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
+        [switch]$NoCache
     )
 
     process {
@@ -281,14 +334,8 @@ function Send-NtfyMessage {
             if ($URI.EndsWith('/')) { $URI + $Topic } else { "$URI/$Topic" }
         } else { "https://ntfy.sh/$Topic" }
 
-        if ($Topic -match '[\s\W]') {
-            throw 'Invalid topic format. The topic should not contain spaces or special characters.'
-        }
-
+        # Manual validation for $Topic and $Phone removed (handled by ValidatePattern)
         if ($Phone) {
-            if ($Phone -notmatch '^\+\d{1,3}\d{10}$') {
-                throw "Invalid phone number format. Please use a '+' sign followed by the country code and the phone number, e.g., +12223334444."
-            }
             $ntfyHeaders.Add('Call', $Phone)
         }
 
@@ -374,6 +421,10 @@ function Send-NtfyMessage {
             $ntfyHeaders.Add('Email', $Email)
         }
 
+        if ($NoCache) {
+            $ntfyHeaders['Cache'] = 'no'
+        }
+
         $Request = @{
             Method  = 'POST'
             URI     = $FullURI
@@ -397,15 +448,19 @@ function Send-NtfyMessage {
 
         try {
             $response = Invoke-RestMethod @Request
-            $response.time = Get-Date -UnixTimeSeconds $response.time
-            $response.expires = Get-Date -UnixTimeSeconds $response.expires
+            if ($response.PSObject.Properties['time']) {
+                $response.time = Get-Date -UnixTimeSeconds $response.time
+            }
+            if ($response.PSObject.Properties['expires']) {
+                $response.expires = Get-Date -UnixTimeSeconds $response.expires
+            }
         } catch {
             $NtfyError = $_.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue
             switch ($NtfyError.http) {
                 400 { Write-Error 'Bad Request:'; Write-Output $Request; Write-Output "`nSee $($NtfyError.link)" }
                 403 { Write-Error 'Need to use authentication for this instance or topic:'; Write-Output "$FullURI"; Write-Output "See $($NtfyError.link)" }
                 404 { Write-Error "Topic not found: $Topic"; Write-Output "$FullURI"; Write-Output "See $($NtfyError.link)" }
-                default { Write-Error 'An error occurred while sending the message.'; Write-Output $_.Exception.Message }
+                default { Write-Error 'An error occurred while sending the message.'; Write-Output $_.Exception.Message; Write-Output $ntfyHeaders }
             }
         }
     }

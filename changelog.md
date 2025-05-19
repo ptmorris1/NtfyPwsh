@@ -4,7 +4,28 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
-## [0.5.0] - 2025-02-01
+## [0.6.0] - 2025-05-19
+
+### Changed
+
+* The `-Action` parameter in `Send-NtfyMessage` was removed and replaced with the parameters `-ActionView`, `-ActionHttp`, and `-ActionBroadcast` for building actions using `Build-NtfyAction`.
+* ⚠️ **Breaking:** You must now use `Build-NtfyAction` with the new action type parameters to construct actions for `Send-NtfyMessage`.
+
+### Removed
+
+* The `-Action` parameter from `Send-NtfyMessage` has been removed. Use `Build-NtfyAction` with the new action type parameters instead.
+
+### Fixed
+
+* Parameter sets now more strictly enforce Ntfy requirements for each action.
+
+### Added
+
+* Added -NoCache Parameter to `Send-NtfyMessage` to prevent the message from being cached server-side
+
+---
+
+## [0.5.0] - 2025-05-18
 
 ### Fixed
 
