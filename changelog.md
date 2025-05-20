@@ -4,6 +4,20 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
+## [1.0.0] - 2025-05-20
+
+### Release
+
+* First official release of NtfyPwsh.  
+
+### Added
+
+* Added `-Markdown` parameter to `Send-NtfyMessage` to enable Markdown formatting in notifications.
+* Added `Write-Verbose` statements for debugging headers and payloads sent to the server.
+* Added `-FirebaseNo` parameter to `Send-NtfyMessage` to avoid forwarding messages to FirebaseCloudMessaging (if configured)
+
+---
+
 ## [0.6.0] - 2025-05-19
 
 ### Changed

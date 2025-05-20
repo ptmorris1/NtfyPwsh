@@ -219,6 +219,12 @@ function Send-NtfyMessage {
     .PARAMETER NoCache
     If specified, adds a header to prevent the message from being cached server-side (sets Cache=no).
 
+    .PARAMETER Markdown
+    If specified, adds 'Content-Type' = 'text/markdown' to the headers.
+
+    .PARAMETER FirebaseNo
+    If specified, adds a header to prevent forwarding the message to Firebase (sets Firebase=no).
+
     .EXAMPLE
     Send-NtfyMessage -Topic 'mytopic' -Title 'Hello' -Body 'This is a test message'
 
@@ -235,6 +241,9 @@ function Send-NtfyMessage {
 
     .EXAMPLE
     Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be stored server-side" -NoCache
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be forwarded to FCM" -FirebaseNo
 
     .OUTPUTS
     System.Object. Returns the ntfy response object, or $null if the request failed.
@@ -325,7 +334,15 @@ function Send-NtfyMessage {
         [Parameter(Mandatory = $false, ParameterSetName = 'Credential')]
         [Parameter(Mandatory = $false, ParameterSetName = 'TokenCreds')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
-        [switch]$NoCache
+        [switch]$NoCache,
+        [Parameter(ParameterSetName = 'Credential')]
+        [Parameter(ParameterSetName = 'TokenCreds')]
+        [Parameter(ParameterSetName = 'Anonymous')]
+        [switch]$Markdown,
+        [Parameter(Mandatory = $false, ParameterSetName = 'Credential')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'TokenCreds')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Anonymous')]
+        [switch]$FirebaseNo
     )
 
     process {
@@ -402,7 +419,7 @@ function Send-NtfyMessage {
         }
 
         if ($OnClick) {
-            $ntfyHeaders.Add('Click', "Click=$OnClick")
+            $ntfyHeaders.Add('Click', "$OnClick")
         }
 
         if ($AttachmentName) {
@@ -425,12 +442,25 @@ function Send-NtfyMessage {
             $ntfyHeaders['Cache'] = 'no'
         }
 
+        if ($FirebaseNo) {
+            $ntfyHeaders['Firebase'] = 'no'
+        }
+
+        if ($Markdown) {
+            $ntfyHeaders['Content-Type'] = 'text/markdown'
+        }
+
+        # Debug: Output headers before sending
+        Write-Verbose "ntfyHeaders: $($ntfyHeaders | Out-String)"
+
         $Request = @{
             Method  = 'POST'
             URI     = $FullURI
             Headers = $ntfyHeaders
             Body    = $Body
         }
+
+        Write-Verbose "Request: $($Request | Out-String)"
 
         # Add authentication info to request if present
         foreach ($key in $RequestAuth.Keys) {
