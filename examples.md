@@ -1,4 +1,5 @@
-# NtfyPwsh TMI edition! Full examples with explanations for the NtfyPwsh module.
+# NtfyPwsh TMI edition! 
+# Full examples with explanations for the NtfyPwsh module.
 
 <img src="/assets/imgs/ntfy.png" alt="ntfy icon" style="height:48px;vertical-align:middle;">
 
