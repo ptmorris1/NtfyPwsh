@@ -17,7 +17,7 @@
     - [Examples](#examples)
     - [Parameters](#parameters-1)
     - [Examples](#examples-1)
-  - [🧑‍💻 Examples](#-examples)
+  - [🧑‍💻📚 Examples](#-examples)
   - [📰 Changelog](#-changelog)
   - [🌐 Further Reading](#-further-reading)
   - [📄 License](#-license)
@@ -62,25 +62,28 @@ Sends a notification using the Ntfy service.
 
 ### Parameters
 
-- `Title` (Optional): The title of the notification.
-- `Body` (Optional): The body content of the notification.
-- `URI` (Optional): The base URI of the Ntfy service. Default is ntfy.sh or enter self hosted URL.
+- `Title` (String, Optional): The title of the notification.
+- `Body` (String, Optional): The body content of the notification.
+- `URI` (String, Optional): The base URI of the Ntfy service. Default is ntfy.sh or enter self-hosted URL.
   > **Note:** If `-URI` is not specified, messages are sent to the free public [ntfy.sh](https://ntfy.sh) server. Topics are public and there are limitations. See [public topics](https://docs.ntfy.sh/publish/?h=public#public-topics) and [limitations](https://docs.ntfy.sh/publish/?h=public#limitations) in the ntfy documentation for details.
-- `Topic` (Mandatory): The topic for the notification. No spaces or special characters.
-- `TokenCreds` (Optional): The credentials for token-based authentication (use `Get-Credential` and enter the API token as the password).
-- `Credential` (Optional): Credentials for basic authentication (use `Get-Credential` for username/password).
-- `Priority` (Optional): The priority of the notification (`Max`, `High`, `Default`, `Low`, `Min`).
-- `Tags` (Optional): Tags for the notification. [TagList](https://docs.ntfy.sh/publish/?h=topic#tags-emojis)
-- `SkipCertCheck` (Optional): A switch to skip certificate checks.
-- `Delay` (Optional): Delay for the notification.
-- `OnClick` (Optional): URL to open when the notification is clicked.
-- `Action` (Optional): Actions for the notification. [Docs](https://docs.ntfy.sh/publish/?h=topic#action-buttons)
-- `AttachmentPath` (Optional): Path to the attachment file.
-- `AttachmentName` (Optional): Name of the attachment file.
-- `AttachmentURL` (Optional): URL of the attachment.
-- `Icon` (Optional): Icon URL for the notification. Only for Android. Only PNG or JPEG.
-- `Email` (Optional): Email address for the notification.
-- `Phone` (Optional): Phone number for the notification.
+- `Topic` (String, Mandatory): The topic for the notification. No spaces or special characters.
+- `TokenCreds` (PSCredential, Optional): Credentials for Bearer token authentication (use `Get-Credential` and enter the API token as the password).
+- `Credential` (PSCredential, Optional): Credentials for basic authentication (use `Get-Credential` for username/password).
+- `Priority` (String, Optional): The priority of the notification (`Max`, `High`, `Default`, `Low`, `Min`).
+- `Tags` (String[], Optional): Tags or emojis for the notification. [TagList](https://docs.ntfy.sh/publish/?h=topic#tags-emojis)
+- `SkipCertCheck` (Switch, Optional): Skip certificate validation (for self-signed SSL, PowerShell 7+ only).
+- `Delay` (String, Optional): Delay for the notification (timestamp, duration, or natural language).
+- `OnClick` (String, Optional): URL to open when the notification is clicked.
+- `Action` (String[] or Object[], Optional): Actions for the notification. Use with [Build-NtfyAction](#-build-ntfyaction).
+- `AttachmentPath` (String, Optional): Path to the local file to attach.
+- `AttachmentName` (String, Optional): Custom name for the attachment file.
+- `AttachmentURL` (String, Optional): URL of the attachment to include.
+- `Icon` (String, Optional): Icon URL or emoji for the notification (Android only, PNG/JPEG or emoji).
+- `Email` (String, Optional): Email address for the notification.
+- `Phone` (String, Optional): Phone number for the notification (must be in +<countrycode><number> format).
+- `NoCache` (Switch, Optional): Prevent message from being cached on the server.
+- `FirebaseNo` (Switch, Optional): Prevent forwarding to Firebase (FCM).
+- `Markdown` (Switch, Optional): Enable Markdown formatting in the body (sets Content-Type to text/markdown).
 
 ### Examples
 
@@ -94,15 +97,19 @@ Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-Ntf
 
 ### Parameters
 
-- `Action` (Mandatory): The type of action (`view`, `http`, `broadcast`).
-- `Label` (Mandatory): The label for the action.
-- `URL` (Mandatory): The URL for the action.
-- `Clear` (Optional): A switch to clear the action.
-- `Method` (Optional): The HTTP method (`GET`, `POST`, `PUT`, `DELETE`).
-- `Body` (Optional): The body content for the HTTP action.
-- `Headers` (Optional): The headers for the HTTP action.
-- `Intent` (Optional): The intent for the broadcast action.
-- `Extras` (Optional): Additional extras for the broadcast action.
+- `ActionView` (Switch, Mandatory for view): Specify to create a 'view' action (open website/app).
+- `ActionHttp` (Switch, Mandatory for http): Specify to create an 'http' action (send HTTP request).
+- `ActionBroadcast` (Switch, Mandatory for broadcast): Specify to create a 'broadcast' action (Android only).
+- `Label` (String, Mandatory): The label for the action button or link.
+- `URL` (String, Mandatory for view/http): The URL associated with the action.
+- `Clear` (Switch, Optional for view): If specified, clears the notification after the action is triggered.
+- `Method` (String, Optional for http): HTTP method for http actions. Valid: 'GET', 'POST', 'PUT', 'DELETE'. Default: 'POST'.
+- `Body` (String, Optional for http): Optional body content for http actions.
+- `Headers` (Hashtable, Optional for http): Optional headers for http actions.
+- `ClearHttp` (Switch, Optional for http): If specified, clears the notification after the http action is triggered.
+- `Intent` (String, Optional for broadcast): Optional intent for broadcast actions (Android only).
+- `Extras` (Hashtable, Optional for broadcast): Optional extras for broadcast actions (Android only).
+- `ClearBroadcast` (Switch, Optional for broadcast): If specified, clears the notification after the broadcast action is triggered.
 
 ### Examples
 
@@ -110,7 +117,7 @@ See the [Examples section](#-examples) below for usage scenarios.
 
 ---
 
-## 🧑‍💻 Examples
+## 🧑‍💻📚 Examples
 
 See [`examples.md`](./examples.md) for detailed usage examples of every parameter and advanced scenarios.
 
@@ -132,4 +139,3 @@ See the [Changelog](changelog.md) for a history of notable changes to this modul
 ## 📄 License
 
 This project is licensed under the MIT License.
-````
