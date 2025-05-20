@@ -32,8 +32,9 @@ NtfyPwsh is a PowerShell module for sending notifications using the Ntfy service
 
 ## 🛠 Requirements
 
-* PowerShell 7 or higher
-* Access to the internet or your self-hosted Ntfy server
+* 🔹PowerShell 7 or higher
+* 🔹Access to the internet or your self-hosted Ntfy server* 
+* 🔹Windows (Linux works for sure but not fully tested yet for everything.)
 
 ---
 
