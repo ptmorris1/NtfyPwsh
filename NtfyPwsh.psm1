@@ -4,25 +4,25 @@ function Build-NtfyAction {
     Builds a properly formatted ntfy action header string for use with ntfy message actions.
 
     .DESCRIPTION
-    Constructs an ntfy action header string based on the provided parameters. Supports 'view', 'http', and 'broadcast' actions, and allows for optional HTTP methods, headers, body, intent, and extras. This function is useful for building the Actions header for ntfy messages that require user interaction or automation.
+    Constructs an ntfy action header string based on the provided parameters. Supports 'view', 'http', and 'broadcast' actions, and allows for optional HTTP methods, headers, body, intent, extras, and clear options. This function is useful for building the Actions header for ntfy messages that require user interaction or automation. Supports up to 3 actions per notification.
 
     .PARAMETER ActionView
-    Switch to specify 'view' action type.
+    Switch to specify 'view' action type (open website/app).
 
     .PARAMETER ActionHttp
-    Switch to specify 'http' action type.
+    Switch to specify 'http' action type (send HTTP request).
 
     .PARAMETER ActionBroadcast
-    Switch to specify 'broadcast' action type.
+    Switch to specify 'broadcast' action type (Android only).
 
     .PARAMETER Label
-    The label for the action button or link.
+    The label for the action button or link (required).
 
     .PARAMETER URL
     The URL associated with the action (required for 'view' and 'http').
 
     .PARAMETER Clear
-    If specified, adds 'clear=true' to the action, which will clear the notification after the action is triggered.
+    If specified, adds 'clear=true' to the action, which will clear the notification after the action is triggered (view only).
 
     .PARAMETER Method
     The HTTP method for 'http' actions. Valid values: 'GET', 'POST', 'PUT', 'DELETE'. Defaults to 'POST'.
@@ -33,11 +33,17 @@ function Build-NtfyAction {
     .PARAMETER Headers
     Optional hashtable of headers for 'http' actions. Each key-value pair will be added as a header.
 
+    .PARAMETER ClearHttp
+    If specified, adds 'clear=true' to the http action.
+
     .PARAMETER Intent
-    Optional intent for 'broadcast' actions (Android only).
+    Optional intent for 'broadcast' actions (Android only). Defaults to 'io.heckel.ntfy.USER_ACTION'.
 
     .PARAMETER Extras
     Optional hashtable of extras for 'broadcast' actions (Android only).
+
+    .PARAMETER ClearBroadcast
+    If specified, adds 'clear=true' to the broadcast action.
 
     .EXAMPLE
     Build-NtfyAction -ActionView -Label 'Open Website' -URL 'https://example.com'
@@ -58,6 +64,7 @@ function Build-NtfyAction {
 
     .NOTES
     See https://docs.ntfy.sh/publish/#actions for more details on ntfy actions.
+    Project: https://github.com/ptmorris1/NtfyPwsh
     #>
     [CmdletBinding(DefaultParameterSetName = 'View')]
     param (
@@ -160,7 +167,7 @@ function Send-NtfyMessage {
     Sends a message to an ntfy topic with optional customization and authentication.
 
     .DESCRIPTION
-    Sends a message to an ntfy topic using the ntfy REST API. Supports custom title, body, priority, tags, actions, attachments, icons, email, phone, and more. Allows for authentication using either Basic (username/password) or Bearer (API token) methods. Can be used with public ntfy.sh or self-hosted ntfy instances.
+    Sends a message to an ntfy topic using the ntfy REST API. Supports custom title, body, priority, tags, actions, attachments (local file or URL), icons, email, phone, delayed/scheduled delivery, click actions, markdown formatting, no-cache, disable Firebase forwarding, and more. Allows for authentication using either Basic (username/password) or Bearer (API token) methods. Can be used with public ntfy.sh or self-hosted ntfy instances. Supports PowerShell credential objects for authentication. Compatible with all ntfy features as of module version.
 
     .PARAMETER Title
     The title of the message (optional).
@@ -184,13 +191,13 @@ function Send-NtfyMessage {
     If specified, skips certificate validation for self-signed SSL certificates (PowerShell 7+ only).
 
     .PARAMETER Delay
-    Optional delay for the message (RFC3339 timestamp or duration string).
+    Optional delay for the message (RFC3339 timestamp, duration string, or natural language).
 
     .PARAMETER OnClick
     Optional URL to open when the message is clicked.
 
     .PARAMETER Action
-    Optional actions to include with the message. Use Build-NtfyAction to construct these.
+    Optional actions to include with the message. Use Build-NtfyAction to construct these. Supports up to 3 actions.
 
     .PARAMETER AttachmentPath
     Optional path to a file to attach to the message.
@@ -199,7 +206,7 @@ function Send-NtfyMessage {
     Optional name for the attached file.
 
     .PARAMETER AttachmentURL
-    Optional URL to an attachment.
+    Optional URL to an attachment (remote file).
 
     .PARAMETER Icon
     Optional icon for the message (URL or emoji).
@@ -240,6 +247,21 @@ function Send-NtfyMessage {
     Send-NtfyMessage -Topic 'mytopic' -Body 'With attachment' -AttachmentPath 'C:\temp\file.txt'
 
     .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body 'With attachment from URL' -AttachmentURL 'https://example.com/file.txt'
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body 'With icon' -Icon 'https://example.com/icon.png'
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body 'With click action' -OnClick 'https://example.com'
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body 'With scheduled delivery' -Delay '10m'
+
+    .EXAMPLE
+    Send-NtfyMessage -Topic 'mytopic' -Body 'With markdown' -Markdown
+
+    .EXAMPLE
     Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be stored server-side" -NoCache
 
     .EXAMPLE
@@ -250,6 +272,7 @@ function Send-NtfyMessage {
 
     .NOTES
     See https://docs.ntfy.sh/publish/ for more details on ntfy message options.
+    Project: https://github.com/ptmorris1/NtfyPwsh
     #>
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (

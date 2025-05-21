@@ -1,7 +1,7 @@
-# NtfyPwsh TMI edition! 
-# Full examples with explanations for the NtfyPwsh module.
-
+# NtfyPwsh TMI edition!
 <img src="/assets/imgs/ntfy.png" alt="ntfy icon" style="height:48px;vertical-align:middle;">
+
+# Full examples with explanations for the NtfyPwsh module.
 
 # 📬 Send-NtfyMessage Cmdlet Overview
 
@@ -29,7 +29,7 @@ The `Send-NtfyMessage` cmdlet is the primary way to send notifications using the
 - `-TokenCreds` (PSCredential): PowerShell credential for API token authentication.
 - `-URI` (String): Custom ntfy server URL (defaults to https://ntfy.sh).
 
-> ℹ️ For a full parameter mapping, see the table at the end of this document.
+> ℹ️ For a full parameter mapping, see the [Parameter Mapping Table](#-parameter-mapping-table).
 
 ## 📨 Publish a Basic Notification.
 
@@ -200,7 +200,7 @@ You can use the `Build-NtfyAction` cmdlet to construct action button definitions
 - `-Intent` (String, broadcast only): Optional intent for broadcast actions (Android only).
 - `-Extras` (Hashtable, broadcast only): Optional extras for broadcast actions (Android only).
 
-### Example: [View Action](https://docs.ntfy.sh/publish/#open-websiteapp)
+### [View Action](https://docs.ntfy.sh/publish/#open-websiteapp)
 ```powershell
 $action = Build-NtfyAction -ActionView -Label 'Open Website' -URL 'https://ntfy.sh'
 $ntfy = @{
@@ -212,7 +212,7 @@ $ntfy = @{
 Send-NtfyMessage @ntfy
 ```
 
-### Example: [HTTP Action](https://docs.ntfy.sh/publish/#send-http-request)
+### [HTTP Action](https://docs.ntfy.sh/publish/#send-http-request)
 ```powershell
 $http = @{
     ActionHttp = $true
@@ -233,7 +233,7 @@ $ntfy = @{
 Send-NtfyMessage @ntfy
 ```
 
-### Example: [Broadcast Action](https://docs.ntfy.sh/publish/#send-android-broadcast) (Android only)
+### [Broadcast Action](https://docs.ntfy.sh/publish/#send-android-broadcast) (Android only)
 ```powershell
 $broadcast = @{
     ActionBroadcast = $true
@@ -304,7 +304,7 @@ Send-NtfyMessage @ntfy
 
 > 📖 **Further reading:** [ntfy documentation – Attach File from a URL](https://docs.ntfy.sh/publish/#attach-file-from-a-url)
 
-## 🖼️ Icon Example
+## 🖼️ Icon Example (Android only)
 
 You can specify an icon for your notification using the `-Icon` parameter. The icon can be a URL to a PNG/JPEG image or an emoji (`Android only`). For example:
 
@@ -439,4 +439,3 @@ Below is a mapping of ntfy headers/parameters to the corresponding PowerShell pa
 | X-Poll-ID        | Poll-ID                       | (not exposed)            | Internal parameter, used for iOS push notifications              |
 | Authorization    | -                             | Credential/TokenCreds     | For authentication (username/password or API token)              |
 | Content-Type     | -                             | Markdown (if set to markdown) | If set to text/markdown, Markdown formatting is enabled     |
-
