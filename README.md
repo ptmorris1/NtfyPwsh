@@ -13,10 +13,8 @@
   - [🦾 Description](#-description)
   - [🛠 Requirements](#-requirements)
   - [📦 Installation](#-installation)
-    - [Parameters](#parameters)
-    - [Examples](#examples)
-    - [Parameters](#parameters-1)
-    - [Examples](#examples-1)
+  - [📝 Send-NtfyMessage](#-send-ntfymessage)
+  - [⚡ Build-NtfyAction](#-build-ntfyaction)
   - [🧑‍💻📚 Examples](#-examples)
   - [📰 Changelog](#-changelog)
   - [🌐 Further Reading](#-further-reading)
@@ -55,13 +53,15 @@ Install-Module -Name NtfyPwsh
 
 ---
 
-## 📝 Send-NtfyMessage <!-- omit in toc -->
+## 📝 Send-NtfyMessage 
 
 Sends a notification using the Ntfy service.
 
 > **Note:** As of v0.4.0, authentication uses `-TokenCreds` (API token via `Get-Credential`) or `-Credential` (username/password via `Get-Credential`). The `-TokenPlainText` parameter has been removed.
 
-### Parameters
+---
+
+### Parameters <!-- omit in toc -->
 
 - `Title` (String, Optional): The title of the notification.
 - `Body` (String, Optional): The body content of the notification.
@@ -86,17 +86,15 @@ Sends a notification using the Ntfy service.
 - `FirebaseNo` (Switch, Optional): Prevent forwarding to Firebase (FCM).
 - `Markdown` (Switch, Optional): Enable Markdown formatting in the body (sets Content-Type to text/markdown).
 
-### Examples
-
-See the [Examples section](#-examples) below for usage scenarios.
-
 ---
 
-## ⚡ Build-NtfyAction <!-- omit in toc -->
+## ⚡ Build-NtfyAction
 
 Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-NtfyMessage](#-send-ntfymessage) -Action parameter. Up to 3 actions are allowed.
 
-### Parameters
+---
+
+### Parameters <!-- omit in toc -->
 
 - `ActionView` (Switch, Mandatory for view): Specify to create a 'view' action (open website/app).
 - `ActionHttp` (Switch, Mandatory for http): Specify to create an 'http' action (send HTTP request).
@@ -111,10 +109,6 @@ Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-Ntf
 - `Intent` (String, Optional for broadcast): Optional intent for broadcast actions (Android only).
 - `Extras` (Hashtable, Optional for broadcast): Optional extras for broadcast actions (Android only).
 - `ClearBroadcast` (Switch, Optional for broadcast): If specified, clears the notification after the broadcast action is triggered.
-
-### Examples
-
-See the [Examples section](#-examples) below for usage scenarios.
 
 ---
 
