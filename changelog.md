@@ -4,6 +4,20 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
+## [1.0.1] - 2025-05-21
+
+### Updated
+
+* Updated comment-based help in the module.
+* Tested on Linux.
+
+### Linux Known Issues
+
+* `-Delay` parameter does not work.
+* `-Email` sends message to ntfy but does not send email.
+
+---
+
 ## [1.0.0] - 2025-05-20
 
 ### Release

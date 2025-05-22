@@ -1,5 +1,5 @@
 @{
-    ModuleVersion   = '1.0.0'
+    ModuleVersion   = '1.0.1'
     Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
     CompanyName     = 'Patrick Morris '
     Copyright       = '2025 Patrick Morris'
@@ -9,13 +9,27 @@
     Description     = 'Powershell module to send ntfy notifications.'
     PrivateData     = @{
         PSData = @{
-            Tags         = 'Windows', 'NtfyPwsh', 'PowerShell', 'PSEdition_Core', 'Ntfy'
+            Tags         = 'Windows', 'NtfyPwsh', 'PowerShell', 'PSEdition_Core', 'Ntfy', 'linux'
             ProjectURI   = 'https://github.com/ptmorris1/NtfyPwsh'
             LicenseURI   = 'https://github.com/ptmorris1/NtfyPwsh/blob/main/LICENSE'
             ReleaseNotes = @'
 # 📅 Changelog
 
 All notable changes to the **NtfyPwsh** module will be documented in this file.
+
+---
+
+## [1.0.1] - 2025-05-21
+
+### Updated
+
+* Updated comment-based help in the module.
+* Tested on Linux.
+
+### Linux Known Issues
+
+* `-Delay` parameter does not work.
+* `-Email` sends message to ntfy but does not send email.
 
 ---
 
@@ -109,7 +123,6 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 ---
 
 > 📌 This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) principles.
-
 '@
         }
     }
