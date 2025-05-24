@@ -57,7 +57,7 @@ function Build-NtfyAction {
     .EXAMPLE
     # Example: Send broadcast action to take a screenshot
     $action = Build-NtfyAction -ActionBroadcast -Label 'Take Screenshot' -Extras @{ cmd = 'screenshot' }
-    Send-NtfyMessage -Topic 'mytopic' -Body 'Please take a screenshot.' -Action $action
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'Please take a screenshot.' -Action $action
 
     .OUTPUTS
     System.String. Returns a formatted ntfy action header string.
@@ -233,39 +233,39 @@ function Send-NtfyMessage {
     If specified, adds a header to prevent forwarding the message to Firebase (sets Firebase=no).
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Title 'Hello' -Body 'This is a test message'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Title 'Hello' -Body 'This is a test message'
 
     .EXAMPLE
     $creds = Get-Credential -UserName api
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With Bearer token' -TokenCreds $creds
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With Bearer token' -TokenCreds $creds
 
     .EXAMPLE
     $creds = Get-Credential -UserName user
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With Basic Auth' -Credential $creds
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With Basic Auth' -Credential $creds
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With attachment' -AttachmentPath 'C:\temp\file.txt'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With attachment' -AttachmentPath 'C:\temp\file.txt'
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With attachment from URL' -AttachmentURL 'https://example.com/file.txt'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With attachment from URL' -AttachmentURL 'https://example.com/file.txt'
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With icon' -Icon 'https://example.com/icon.png'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With icon' -Icon 'https://example.com/icon.png'
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With click action' -OnClick 'https://example.com'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With click action' -OnClick 'https://example.com'
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With scheduled delivery' -Delay '10m'
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With scheduled delivery' -Delay '10m'
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body 'With markdown' -Markdown
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body 'With markdown' -Markdown
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be stored server-side" -NoCache
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body "This message won't be stored server-side" -NoCache
 
     .EXAMPLE
-    Send-NtfyMessage -Topic 'mytopic' -Body "This message won't be forwarded to FCM" -FirebaseNo
+    Send-NtfyMessage -Topic 'ntfypwsh' -Body "This message won't be forwarded to FCM" -FirebaseNo
 
     .OUTPUTS
     System.Object. Returns the ntfy response object, or $null if the request failed.

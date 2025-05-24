@@ -2,7 +2,7 @@
     ModuleVersion   = '1.0.1'
     Guid            = 'aebdf1cd-c1b6-45b6-9326-cad46ac56889'
     CompanyName     = 'Patrick Morris '
-    Copyright       = '2025 Patrick Morris'
+    Copyright       = '24-2025 Patrick Morris'
     Author          = 'Patrick Morris'
     AliasesToExport = '*'
     RootModule      = 'NtfyPwsh.psm1'
