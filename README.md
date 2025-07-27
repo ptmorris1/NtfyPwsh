@@ -114,13 +114,13 @@ Builds [actions](https://docs.ntfy.sh/publish/#action-buttons) for the [Send-Ntf
 
 ## 🧑‍💻📚 Examples
 
-See [`examples.md`](./examples.md) for detailed usage examples of every parameter and advanced scenarios.
+Check out the [NtfyPwsh TMI Edition](https://ptmorris1.github.io/posts/NtfyPwsh-Examples/)
 
 ---
 
 ## 📰 Changelog
 
-See the [Changelog](changelog.md) for a history of notable changes to this module.
+See the [Changelog](./docs/changelog.md) for a history of notable changes to this module.
 
 ---
 

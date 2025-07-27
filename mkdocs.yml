@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Ntfy PowerShell Module
+site_author: "Patrick Morris"
+site_description: "Documentation for the Ntfy PowerShell Module"
+repo_name: NtfyPwsh
+repo_url: https://github.com/ptmorris1/NtfyPwsh
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+      #primary: cyan
+      #accent: indigo
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+      #primary: cyan
+      #accent: indigo
+  icon:
+    logo: simple/ntfy
+    repo: fontawesome/brands/github-alt
+  features:
+    - navigation.tabs
+    - navigation.path
+    - navigation.expand
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.top
+    - navigation.tabs.sticky
+    - navigation.instant
+    - navigation.instant.progress
+    - toc.follow
+    - content.code.copy
+    
+
+plugins:
+  - offline:
+      enabled: true
+  - search:
+      enabled: true
+  - awesome-pages
+  - privacy
+  
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

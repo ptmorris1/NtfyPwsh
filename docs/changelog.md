@@ -4,6 +4,19 @@ All notable changes to the **NtfyPwsh** module will be documented in this file.
 
 ---
 
+## [1.1.0] - 2025-07-27
+
+### Changed
+
+* Moved functions to their own `.ps1` files for better modularity and maintainability.
+* Removed `examples.md` and now use the blog post as the primary location for all examples.
+
+### Added
+
+* Added `mkdocs` documentation support for the project.
+
+---
+
 ## [1.0.1] - 2025-05-21
 
 ### Updated
