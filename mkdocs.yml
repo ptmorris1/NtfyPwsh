@@ -46,7 +46,7 @@ plugins:
   - search:
       enabled: true
   - awesome-pages
-  - privacy
+  #- privacy
   
 
 markdown_extensions:
